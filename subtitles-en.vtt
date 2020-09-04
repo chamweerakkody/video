@@ -1,0 +1,293 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:02.160
+Hello. In this lesson,
+
+2
+00:00:02.160 --> 00:00:05.745
+we are going to talk about bootstrapping the Apigee platform.
+
+3
+00:00:05.745 --> 00:00:09.420
+At this point, the installation topology is complete.
+
+4
+00:00:09.420 --> 00:00:13.460
+Infrastructure has been provisioned and prerequisites are in place.
+
+5
+00:00:13.460 --> 00:00:16.835
+It's time to bootstrap the hosts in your cluster.
+
+6
+00:00:16.835 --> 00:00:21.815
+Bootstrapping is the term we use for the first step of the installation process.
+
+7
+00:00:21.815 --> 00:00:26.700
+To bootstrap, you will download and run a script from the Apigee software repository.
+
+8
+00:00:26.700 --> 00:00:29.320
+The script will configure your system to
+
+9
+00:00:29.320 --> 00:00:32.510
+talk to the Apigee software repository you specify.
+
+10
+00:00:32.510 --> 00:00:36.060
+It will also install common base utilities that all Apigee
+
+11
+00:00:36.060 --> 00:00:39.975
+hosts require in order to complete the rest of the installation process.
+
+12
+00:00:39.975 --> 00:00:43.400
+It is during the bootstrapping process that you configure each host to
+
+13
+00:00:43.400 --> 00:00:47.130
+communicate with the default repository at software.apigee.com,
+
+14
+00:00:47.130 --> 00:00:49.940
+your local network mirror of that repository,
+
+15
+00:00:49.940 --> 00:00:52.125
+or a file system location.
+
+16
+00:00:52.125 --> 00:00:54.770
+With our installation topology in mind,
+
+17
+00:00:54.770 --> 00:00:57.100
+let's begin the bootstrapping process.
+
+18
+00:00:57.100 --> 00:00:59.640
+The first step in the process is to download
+
+19
+00:00:59.640 --> 00:01:02.205
+the bootstrap script from the desired repository.
+
+20
+00:01:02.205 --> 00:01:07.400
+For this demo, we'll be using the repository hosted by Apigee at software.apigee.com.
+
+21
+00:01:07.400 --> 00:01:11.390
+In your environment, you may be pulling the script from your local mirror.
+
+22
+00:01:11.390 --> 00:01:14.790
+If you are using the tarballs software distribution method,
+
+23
+00:01:14.790 --> 00:01:17.280
+the bootstrap script will already be available in
+
+24
+00:01:17.280 --> 00:01:21.095
+your local file system at the location to which you decompressed the tarball.
+
+25
+00:01:21.095 --> 00:01:27.355
+Here, we're downloading the bootstrap script to /temp/apigee using the Kernel command.
+
+26
+00:01:27.355 --> 00:01:30.420
+Note the version string embedded in the filename.
+
+27
+00:01:30.420 --> 00:01:33.165
+Each release has its own bootstrap script,
+
+28
+00:01:33.165 --> 00:01:36.585
+so be sure to download the right script for your desired release.
+
+29
+00:01:36.585 --> 00:01:38.600
+We'll discuss the Apigee Edge for
+
+30
+00:01:38.600 --> 00:01:42.360
+private cloud release cadence and versioning in a later course.
+
+31
+00:01:42.360 --> 00:01:45.890
+The next step is to execute the bootstrap script.
+
+32
+00:01:45.890 --> 00:01:48.480
+You can either make the script executable or
+
+33
+00:01:48.480 --> 00:01:51.760
+prefix the script path with bash as shown here.
+
+34
+00:01:51.760 --> 00:01:54.300
+Arguments to the script vary,
+
+35
+00:01:54.300 --> 00:01:58.670
+but if you're using the Apigee hosted repository at software.apigee.com,
+
+36
+00:01:58.670 --> 00:02:01.790
+you'll need to provide at least the Apigee user argument.
+
+37
+00:02:01.790 --> 00:02:04.500
+You can also pass in the Apigee password argument
+
+38
+00:02:04.500 --> 00:02:06.580
+on the command line for non-interactive use.
+
+39
+00:02:06.580 --> 00:02:10.670
+But in this example, we'll just let the script prompt us for the correct password.
+
+40
+00:02:10.670 --> 00:02:13.760
+There are some other arguments you may wish to use if you
+
+41
+00:02:13.760 --> 00:02:16.570
+are hosting your own repository mirror or tarball.
+
+42
+00:02:16.570 --> 00:02:22.250
+For instance, the Apigee protocol argument can be set to http:// or
+
+43
+00:02:22.250 --> 00:02:28.205
+file:// if you are not using the default TLS-encrypted http connection.
+
+44
+00:02:28.205 --> 00:02:30.520
+The Apigee repo host argument is
+
+45
+00:02:30.520 --> 00:02:34.035
+useful if you are using a local mirror of the repository.
+
+46
+00:02:34.035 --> 00:02:40.055
+The bootstrap script stopped here because it does not detect a valid JDK on the system.
+
+47
+00:02:40.055 --> 00:02:42.925
+As discussed in the prerequisites lesson,
+
+48
+00:02:42.925 --> 00:02:46.960
+a supported JDK is required for the installation to succeed.
+
+49
+00:02:46.960 --> 00:02:51.600
+If I had already installed a supported JDK and the bootstrap script was able to
+
+50
+00:02:51.600 --> 00:02:56.470
+locate it based on the path or Java home variables, I wouldn't be prompted.
+
+51
+00:02:56.470 --> 00:02:59.110
+In this case, I'll just tell the script to install
+
+52
+00:02:59.110 --> 00:03:02.105
+the open JDK from my distributor repository.
+
+53
+00:03:02.105 --> 00:03:04.985
+With the open JDK installation complete,
+
+54
+00:03:04.985 --> 00:03:07.805
+the bootstrap script stores the Java home location
+
+55
+00:03:07.805 --> 00:03:10.905
+and the Apigee local configuration and exits.
+
+56
+00:03:10.905 --> 00:03:16.125
+The final step in the bootstrapping process is to install the Apigee setup utility.
+
+57
+00:03:16.125 --> 00:03:20.230
+This utility is not automatically installed by the bootstrap script,
+
+58
+00:03:20.230 --> 00:03:23.410
+but it is required to drive the remainder of the installation.
+
+59
+00:03:23.410 --> 00:03:25.205
+To install the utility,
+
+60
+00:03:25.205 --> 00:03:29.355
+run Apigee service, Apigee setup, install.
+
+61
+00:03:29.355 --> 00:03:33.735
+At this point, we have successfully bootstrapped the first host in the cluster.
+
+62
+00:03:33.735 --> 00:03:36.540
+The same bootstrapping process can be completed across
+
+63
+00:03:36.540 --> 00:03:41.225
+all other hosts at this time before we continue on with other parts of the installation.
+
+64
+00:03:41.225 --> 00:03:43.990
+If you are following along in your own cluster,
+
+65
+00:03:43.990 --> 00:03:47.895
+you will now see a number of directories in /opt/apigee.
+
+66
+00:03:47.895 --> 00:03:50.950
+These directories contain the basic structure needed to support
+
+67
+00:03:50.950 --> 00:03:53.410
+an Apigee installation as well as a number of
+
+68
+00:03:53.410 --> 00:03:56.375
+base utilities required by higher level services.
+
+69
+00:03:56.375 --> 00:04:00.735
+In a later module, we will explore the file system structure in detail.
+
+70
+00:04:00.735 --> 00:04:03.255
+For more information on this topic,
+
+71
+00:04:03.255 --> 00:04:04.915
+refer to our documentation.
+
+72
+00:04:04.915 --> 00:04:06.230
+If you have any questions,
+
+73
+00:04:06.230 --> 00:04:09.000
+please post them on our community. Thanks for watching.

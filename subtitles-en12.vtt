@@ -1,0 +1,301 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:02.725
+Hello. In this lesson,
+
+2
+00:00:02.725 --> 00:00:07.945
+we will talk about provisioning organizations and environments in the Apigee platform.
+
+3
+00:00:07.945 --> 00:00:10.285
+In the previous lessons,
+
+4
+00:00:10.285 --> 00:00:12.990
+we bootstrapped the hosts in our Apigee planet,
+
+5
+00:00:12.990 --> 00:00:15.620
+then ran the setup program to configure components
+
+6
+00:00:15.620 --> 00:00:18.730
+on each host according to the roles they were assigned.
+
+7
+00:00:18.730 --> 00:00:22.790
+At this point, all of our Apigee Edge services are installed,
+
+8
+00:00:22.790 --> 00:00:28.455
+but we still need to create an organization and environment in order to use the platform.
+
+9
+00:00:28.455 --> 00:00:33.710
+For this demo, we are going to create an organization named apigee,
+
+10
+00:00:33.710 --> 00:00:36.090
+with an environment named prod.
+
+11
+00:00:36.090 --> 00:00:38.595
+As with the profile setup process,
+
+12
+00:00:38.595 --> 00:00:41.745
+we will use a response file to describe our settings.
+
+13
+00:00:41.745 --> 00:00:44.740
+That file will be fed to a utility that will do
+
+14
+00:00:44.740 --> 00:00:48.285
+the work of provisioning the organization and environment for us.
+
+15
+00:00:48.285 --> 00:00:51.550
+This is the response file we will be using,
+
+16
+00:00:51.550 --> 00:00:54.930
+ORG_NAME and ENV_NAME define
+
+17
+00:00:54.930 --> 00:00:57.835
+the names of the organization and environment we are creating.
+
+18
+00:00:57.835 --> 00:01:02.050
+They should be lowercase and contain only letters and dashes.
+
+19
+00:01:02.050 --> 00:01:08.050
+VHOST_PORT is the TCP port on which the router will listen for incoming connections.
+
+20
+00:01:08.050 --> 00:01:11.630
+The convention is to start at 9001 and count up,
+
+21
+00:01:11.630 --> 00:01:16.045
+but you can select any unused port above 1023.
+
+22
+00:01:16.045 --> 00:01:20.075
+VHOST_NAME is simply a label for the virtual host.
+
+23
+00:01:20.075 --> 00:01:22.950
+The convention is to use default for the plain text
+
+24
+00:01:22.950 --> 00:01:26.745
+virtual host and secure for the TLS encrypted virtual host,
+
+25
+00:01:26.745 --> 00:01:29.685
+but you can use a different name if necessary.
+
+26
+00:01:29.685 --> 00:01:33.340
+VHOST_ALIAS defines the space separated list of
+
+27
+00:01:33.340 --> 00:01:37.725
+host names that the router will accept for incoming HTTP requests.
+
+28
+00:01:37.725 --> 00:01:40.670
+If the router receives an HTTP request with
+
+29
+00:01:40.670 --> 00:01:44.655
+a host header that it does not recognize, the request will be dropped.
+
+30
+00:01:44.655 --> 00:01:48.280
+ORG_ADMIN is the email of the user that should be assigned
+
+31
+00:01:48.280 --> 00:01:51.900
+to the organization administrator role in this new organization,
+
+32
+00:01:51.900 --> 00:01:54.380
+the user must already exist.
+
+33
+00:01:54.380 --> 00:01:57.505
+There are additional variables you can add to this response file
+
+34
+00:01:57.505 --> 00:02:00.920
+if you wish to create a new user at the time you provision the organization.
+
+35
+00:02:00.920 --> 00:02:04.020
+See our documentation for full details.
+
+36
+00:02:04.020 --> 00:02:07.230
+APIGEE_ADMINPW is the password of
+
+37
+00:02:07.230 --> 00:02:10.750
+the sysadmin user that will be used to create this organization.
+
+38
+00:02:10.750 --> 00:02:15.920
+The default sysadmin email is the initial sysadmin user you created at installation time,
+
+39
+00:02:15.920 --> 00:02:20.445
+but you can define the admin email variable to choose a different sysadmin user.
+
+40
+00:02:20.445 --> 00:02:23.125
+We have our provisioning response file,
+
+41
+00:02:23.125 --> 00:02:26.280
+the next step is to install the provisioning utility.
+
+42
+00:02:26.280 --> 00:02:31.375
+All commands described here should be run one time on a single management server.
+
+43
+00:02:31.375 --> 00:02:35.630
+Since actions taken on any management server affect the planet globally,
+
+44
+00:02:35.630 --> 00:02:40.160
+you do not need to run them on all management servers or any other component.
+
+45
+00:02:40.160 --> 00:02:43.015
+As with the Apigee setup utility,
+
+46
+00:02:43.015 --> 00:02:45.570
+we will use the Apigee service command to install
+
+47
+00:02:45.570 --> 00:02:49.310
+the Apigee provision utility from the Apigee software repository.
+
+48
+00:02:49.310 --> 00:02:54.950
+The command is, apigee-service apigee-provision install.
+
+49
+00:02:54.950 --> 00:02:58.295
+After the provisioning utility is installed,
+
+50
+00:02:58.295 --> 00:03:01.685
+the full command to set up the organization will be,
+
+51
+00:03:01.685 --> 00:03:06.640
+apigee-service apigee-provision setup-org -f,
+
+52
+00:03:06.640 --> 00:03:15.835
+and the path to our response file, which is, /temp/apigee/response-org.txt.
+
+53
+00:03:15.835 --> 00:03:20.145
+Let's put all of this together to provision our organization.
+
+54
+00:03:20.145 --> 00:03:26.970
+As before, files necessary for the installation are stored in /temp/apigee.
+
+55
+00:03:26.970 --> 00:03:32.385
+Here, you can see the provisioning response file we will use.
+
+56
+00:03:32.385 --> 00:03:37.570
+Installing the Apigee provision utility is straightforward and
+
+57
+00:03:37.570 --> 00:03:43.205
+requires only a download and installation from our Apigee software repository.
+
+58
+00:03:43.205 --> 00:03:48.600
+Finally, let's run the Apigee provision utility.
+
+59
+00:03:48.600 --> 00:03:51.680
+The setup-org action will take a moment to run,
+
+60
+00:03:51.680 --> 00:03:53.370
+and you'll see a lot of output.
+
+61
+00:03:53.370 --> 00:03:57.375
+Setting up an organization does more than just create the organization,
+
+62
+00:03:57.375 --> 00:03:58.975
+environment and virtual host,
+
+63
+00:03:58.975 --> 00:04:02.330
+it also sets up default organizational roles for users,
+
+64
+00:04:02.330 --> 00:04:04.640
+assigns an organization administrator,
+
+65
+00:04:04.640 --> 00:04:07.110
+connects message processors to the environment to
+
+66
+00:04:07.110 --> 00:04:11.520
+provide API request processing capacity, and much more.
+
+67
+00:04:11.520 --> 00:04:15.190
+Now that the provisioning process is complete,
+
+68
+00:04:15.190 --> 00:04:18.110
+we can log into the Apigee Enterprise UI by
+
+69
+00:04:18.110 --> 00:04:21.870
+accessing host one in a web browser on port 9000.
+
+70
+00:04:21.870 --> 00:04:26.905
+Log in with the sysadmin credentials you provided in the profile setup response file,
+
+71
+00:04:26.905 --> 00:04:30.465
+and you'll end up at the Apigee UI dashboard page.
+
+72
+00:04:30.465 --> 00:04:32.715
+For more information on this topic,
+
+73
+00:04:32.715 --> 00:04:34.340
+refer to our documentation.
+
+74
+00:04:34.340 --> 00:04:35.865
+If you have any questions,
+
+75
+00:04:35.865 --> 00:04:39.000
+please post them to our community. Thanks for watching.
